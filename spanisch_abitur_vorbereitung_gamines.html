@@ -1,0 +1,268 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans)}
+.app{padding:1.5rem 0;max-width:680px}
+.tabs{display:flex;gap:4px;margin-bottom:1.5rem;border-bottom:0.5px solid var(--color-border-tertiary);padding-bottom:0}
+.tab{padding:8px 16px;font-size:14px;font-weight:500;cursor:pointer;border:none;background:transparent;color:var(--color-text-secondary);border-bottom:2px solid transparent;margin-bottom:-1px}
+.tab.active{color:var(--color-text-primary);border-bottom-color:var(--color-text-primary)}
+.tab:hover{color:var(--color-text-primary)}
+.section{display:none}.section.active{display:block}
+
+.vocab-filter{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1rem}
+.filter-btn{padding:4px 12px;font-size:13px;border:0.5px solid var(--color-border-secondary);border-radius:99px;cursor:pointer;background:transparent;color:var(--color-text-secondary)}
+.filter-btn.active{background:var(--color-background-secondary);color:var(--color-text-primary);border-color:var(--color-border-primary)}
+.vocab-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.vocab-card{padding:10px 14px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);background:var(--color-background-primary);cursor:pointer;transition:background 0.15s}
+.vocab-card:hover{background:var(--color-background-secondary)}
+.vocab-es{font-size:15px;font-weight:500;color:var(--color-text-primary)}
+.vocab-de{font-size:13px;color:var(--color-text-secondary);margin-top:2px}
+.vocab-cat{font-size:11px;color:#1D9E75;font-weight:500;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:4px}
+.hidden-de .vocab-de{display:none}
+.reveal-hint{font-size:12px;color:var(--color-text-tertiary);margin-bottom:8px}
+
+.quiz-meta{display:flex;gap:12px;align-items:center;margin-bottom:1rem}
+.level-sel{font-size:14px;padding:6px 10px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md)}
+.progress-bar{flex:1;height:4px;background:var(--color-background-secondary);border-radius:2px;overflow:hidden}
+.progress-fill{height:100%;background:#1D9E75;transition:width 0.3s;border-radius:2px}
+.progress-txt{font-size:13px;color:var(--color-text-secondary);white-space:nowrap}
+
+.q-card{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1.25rem;background:var(--color-background-primary);margin-bottom:1rem}
+.q-level{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px}
+.q-level.A{color:#3B6D11}.q-level.B{color:#185FA5}.q-level.C{color:#993C1D}
+.q-text{font-size:15px;color:var(--color-text-primary);line-height:1.6;margin-bottom:1rem}
+.opts{display:flex;flex-direction:column;gap:6px}
+.opt{padding:10px 14px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);cursor:pointer;font-size:14px;text-align:left;background:var(--color-background-primary);color:var(--color-text-primary);transition:background 0.1s}
+.opt:hover:not(:disabled){background:var(--color-background-secondary)}
+.opt.correct{background:#EAF3DE;border-color:#639922;color:#27500A}
+.opt.wrong{background:#FCEBEB;border-color:#A32D2D;color:#501313}
+.opt.reveal{background:#E6F1FB;border-color:#185FA5;color:#042C53}
+.feedback{padding:10px 14px;border-radius:var(--border-radius-md);font-size:14px;margin-top:8px;line-height:1.5}
+.feedback.correct{background:#EAF3DE;color:#27500A}
+.feedback.wrong{background:#FCEBEB;color:#501313}
+.next-btn{margin-top:12px;width:100%}
+.score-display{text-align:center;padding:2rem;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg)}
+.score-num{font-size:48px;font-weight:500;color:var(--color-text-primary)}
+.score-sub{font-size:15px;color:var(--color-text-secondary);margin-top:4px}
+.retry-btn{margin-top:1rem}
+
+.exam-intro{background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;margin-bottom:1rem;font-size:14px;line-height:1.7;color:var(--color-text-secondary)}
+.exam-intro strong{color:var(--color-text-primary);font-weight:500}
+.q-sample{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1.25rem;margin-bottom:12px}
+.q-sample-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}
+.q-sample-type{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.05em;color:var(--color-text-secondary)}
+.q-sample-lvl{font-size:11px;padding:2px 8px;border-radius:99px;background:var(--color-background-info);color:var(--color-text-info)}
+.q-sample-q{font-size:15px;color:var(--color-text-primary);line-height:1.6;margin-bottom:8px}
+.q-sample-tip{font-size:13px;color:var(--color-text-secondary);font-style:italic;border-left:2px solid var(--color-border-secondary);padding-left:10px;margin-top:8px}
+.sendprompt-btn{font-size:13px;color:var(--color-text-info);border:none;background:none;cursor:pointer;padding:0;margin-top:6px}
+.sendprompt-btn:hover{text-decoration:underline}
+</style>
+
+<h2 class="sr-only" style="position:absolute;left:-9999px">Spanisch Abitur Vorbereitung – Gamines und Kinderarbeit</h2>
+<div class="app">
+<div class="tabs">
+  <button class="tab active" onclick="showTab('vocab')">Vokabeln</button>
+  <button class="tab" onclick="showTab('quiz')">Quiz</button>
+  <button class="tab" onclick="showTab('exam')">Prüfungsfragen</button>
+</div>
+
+<div id="vocab" class="section active">
+  <p class="reveal-hint">Auf eine Karte klicken, um die Übersetzung ein-/auszublenden.</p>
+  <div class="vocab-filter">
+    <button class="filter-btn active" onclick="filterVocab('all',this)">Alle</button>
+    <button class="filter-btn" onclick="filterVocab('definicion',this)">Definition</button>
+    <button class="filter-btn" onclick="filterVocab('causas',this)">Ursachen</button>
+    <button class="filter-btn" onclick="filterVocab('efectos',this)">Auswirkungen</button>
+    <button class="filter-btn" onclick="filterVocab('soluciones',this)">Lösungen</button>
+    <button class="filter-btn" onclick="filterVocab('opinion',this)">Meinung</button>
+  </div>
+  <div class="vocab-grid" id="vocabGrid"></div>
+</div>
+
+<div id="quiz" class="section">
+  <div class="quiz-meta">
+    <select class="level-sel" id="levelSel" onchange="initQuiz()">
+      <option value="A">Niveau A – Reproduktion</option>
+      <option value="B">Niveau B – Analyse</option>
+      <option value="C">Niveau C – Bewertung</option>
+      <option value="all">Alle Niveaus gemischt</option>
+    </select>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    <span class="progress-txt" id="progressTxt">0/10</span>
+  </div>
+  <div id="quizBody"></div>
+</div>
+
+<div id="exam" class="section">
+  <div class="exam-intro">
+    <strong>NRW mündliche Abiturprüfung Spanisch:</strong> 30 Min. Vorbereitung, 20–30 Min. Prüfung.<br>
+    Teil 1 (10–15 Min.): Monologisches Sprechen zu einem Impuls/Text. Teil 2 (10–15 Min.): Prüfungsgespräch mit Diskussion.<br>
+    Bewertet werden: inhaltliche Kompetenz, sprachliche Korrektheit, Aussprache/Intonation und interkulturelle Reflexion.
+  </div>
+  <div id="examBody"></div>
+</div>
+</div>
+
+<script>
+const VOCAB = [
+  {es:"el trabajo infantil",de:"die Kinderarbeit",cat:"definicion"},
+  {es:"el/la gamin/a",de:"Straßenkind (Kolumbien/Lateinamerika)",cat:"definicion"},
+  {es:"la niñez / la infancia",de:"die Kindheit",cat:"definicion"},
+  {es:"privar a alguien de algo",de:"jemanden um etwas berauben",cat:"definicion"},
+  {es:"el desarrollo físico y psicológico",de:"die körperliche und psychische Entwicklung",cat:"definicion"},
+  {es:"vulnerar los derechos",de:"Rechte verletzen",cat:"definicion"},
+  {es:"la brecha entre ricos y pobres",de:"die Schere zwischen Arm und Reich",cat:"causas"},
+  {es:"la pobreza",de:"die Armut",cat:"causas"},
+  {es:"la violencia familiar",de:"häusliche Gewalt",cat:"causas"},
+  {es:"escapar de la realidad",de:"der Realität entkommen",cat:"causas"},
+  {es:"la desigualdad social",de:"soziale Ungleichheit",cat:"causas"},
+  {es:"las familias necesitan los ingresos",de:"die Familien brauchen das Einkommen",cat:"causas"},
+  {es:"ser marginado",de:"ausgegrenzt werden",cat:"efectos"},
+  {es:"terminar en la calle",de:"auf der Straße landen",cat:"efectos"},
+  {es:"convertirse en criminal",de:"zum Kriminellen werden",cat:"efectos"},
+  {es:"la prostitución",de:"die Prostitution",cat:"efectos"},
+  {es:"traficar drogas",de:"mit Drogen handeln",cat:"efectos"},
+  {es:"formar bandadas",de:"sich Banden anschließen",cat:"efectos"},
+  {es:"problemas al nivel emocional y social",de:"Probleme auf emotionaler und sozialer Ebene",cat:"efectos"},
+  {es:"la organización humanitaria",de:"die humanitäre Organisation",cat:"soluciones"},
+  {es:"la ONG",de:"die NGO / Nichtregierungsorganisation",cat:"soluciones"},
+  {es:"la alimentación balanceada",de:"ausgewogene Ernährung",cat:"soluciones"},
+  {es:"la ayuda pedagógica y psicológica",de:"pädagogische und psychologische Unterstützung",cat:"soluciones"},
+  {es:"la reintegración familiar",de:"die Wiedereingliederung in die Familie",cat:"soluciones"},
+  {es:"reconstruir su confianza",de:"Vertrauen wieder aufbauen",cat:"soluciones"},
+  {es:"tomar la decisión de cambiar su vida",de:"die Entscheidung treffen, sein Leben zu ändern",cat:"soluciones"},
+  {es:"trabajos calificados",de:"qualifizierte Arbeit",cat:"soluciones"},
+  {es:"en mi opinión / a mi modo de ver",de:"meiner Meinung nach",cat:"opinion"},
+  {es:"hay que tener en cuenta que…",de:"man muss berücksichtigen, dass…",cat:"opinion"},
+  {es:"es imprescindible que + subj.",de:"es ist unerlässlich, dass…",cat:"opinion"},
+  {es:"por un lado… por otro lado…",de:"einerseits… andererseits…",cat:"opinion"},
+  {es:"sin embargo / no obstante",de:"dennoch / trotzdem",cat:"opinion"},
+  {es:"en lugar de + inf.",de:"anstatt zu…",cat:"opinion"},
+  {es:"aunque + ind./subj.",de:"obwohl / auch wenn",cat:"opinion"},
+  {es:"la ley del trabajo juvenil",de:"das Jugendarbeitsgesetz",cat:"definicion"},
+  {es:"promulgar una ley",de:"ein Gesetz erlassen",cat:"definicion"},
+  {es:"un retroceso",de:"ein Rückschritt",cat:"efectos"},
+];
+
+const QUESTIONS = [
+  {lvl:"A",q:"¿Cómo se define el trabajo infantil según los documentos?",opts:["Todo trabajo que priva a los niños de su niñez, potencial y dignidad, perjudicial para su desarrollo","Cualquier trabajo realizado por menores de 18 años en fábricas","Solo el trabajo en minas y agricultura","El trabajo no remunerado de menores"],correct:0,fb:"Definición exacta del texto: trabajo que priva de niñez, potencial y dignidad, dañino para el desarrollo físico y psicológico."},
+  {lvl:"A",q:"¿Cuáles son tres trabajos que ejercen los niños para sobrevivir?",opts:["Limpian zapatos, venden caramelos, cuidan autos","Trabajan en oficinas, hoteles y supermercados","Estudian y practican deportes profesionales","Trabajan solo en la agricultura"],correct:0,fb:"Según el documento: limpiar zapatos/cristales, vender caramelos/periódicos/drogas, cuidar autos, etc."},
+  {lvl:"A",q:"¿Cuántas etapas tiene el programa de la Fundación Pro Niños?",opts:["Dos etapas","Tres etapas","Cuatro etapas","Una etapa con varios pasos"],correct:1,fb:"Tres etapas: 1) establecer confianza, 2) mostrar que la vida puede ser diferente, 3) que el niño tome la decisión de cambiar."},
+  {lvl:"A",q:"¿Qué derechos fundamentales son vulnerados según los documentos?",opts:["Educación gratuita, atención médica, vivir en paz, protección ante la explotación","Solo el derecho a la educación","Solo el derecho a no trabajar","El derecho al voto y a la propiedad"],correct:0,fb:"Listados en el documento: educación, atención médica, amor/comprensión, vivir en paz, apoyo y protección ante violación/abandono/explotación."},
+  {lvl:"B",q:"¿Por qué muchos jóvenes se unen a bandas peligrosas? Explica la causa principal.",opts:["Porque quieren dinero fácil sin esfuerzo","Porque sufren violencia familiar y buscan una familia sustituta con cariño y protección","Porque las bandas les ofrecen educación","Porque el Estado los obliga a unirse"],correct:1,fb:"El texto señala que estos niños frecuentemente sufren violencia familiar y quieren escapar de su realidad → buscan familia, cariño y protección en las bandas."},
+  {lvl:"B",q:"¿Por qué Bolivia legalizó el trabajo infantil desde los 10 años? Menciona dos razones.",opts:["Para aumentar el PIB y atraer inversión extranjera","Porque hay un millón de trabajadores menores y es imposible prohibirlo; se necesita regularlo para evitar abusos","Porque los niños prefieren trabajar a estudiar","Porque la ONU lo exige"],correct:1,fb:"Razones del texto: hay un millón de trabajadores menores en el país (realidad innegable), es imposible prohibirlo, y es necesario regularlo para evitar abusos y proteger a los niños."},
+  {lvl:"B",q:"¿Cuál es la crítica principal contra la ley boliviana, según los organismos internacionales?",opts:["Que las horas de trabajo son demasiado pocas","Que Bolivia es el único país del mundo que permite el trabajo infantil, y no se puede controlar su cumplimiento","Que la ley no incluye a los menores de 10 años","Que los salarios son demasiado altos"],correct:1,fb:"Críticas: Bolivia es el único país del mundo con esta ley (retroceso), no se puede controlar que se cumplen los 6 horas, no se puede evitar abusos → no ayuda a disminuir el trabajo infantil."},
+  {lvl:"B",q:"¿Por qué son necesarios muchos programas y etapas para ayudar a los gamines?",opts:["Porque los programas son muy caros y complicados","Porque los niños tienen muchos problemas emocionales y sociales; deben reconstruir su confianza y tomar la decisión ellos mismos","Porque el gobierno lo exige así","Porque los niños no quieren cambiar"],correct:1,fb:"El texto explica: los niños tienen problemas emocionales y sociales, necesitan reconstruir su confianza, y la decisión de cambiar debe venir de ellos mismos para que no vuelvan a la calle."},
+  {lvl:"C",q:"Evalúa: ¿es la ley boliviana sobre el trabajo juvenil un avance o un retroceso? Defiende tu posición.",opts:["Solo es un avance porque protege a los niños trabajadores","Solo es un retroceso porque ningún país civilizado debería permitirlo","Puede ser un avance pragmático al regularizar una realidad existente, pero representa un retroceso en derechos del niño porque acepta lo que debería eliminarse","No es ni avance ni retroceso"],correct:2,fb:"Respuesta modelo: reconoce la contradicción — pragmáticamente regula una realidad (a favor), pero idealmente acepta lo que los organismos internacionales consideran una violación de derechos. Una posición matizada es la más sólida en el Abitur."},
+  {lvl:"C",q:"'La gente en todo el mundo es responsable para el sufrimiento de los gamines.' ¿Estás de acuerdo? Argumenta.",opts:["No, la responsabilidad es solo de los padres","Sí, el consumo global y la indiferencia de las sociedades ricas contribuyen indirectamente a la pobreza que genera el trabajo infantil","No, es solo responsabilidad del gobierno boliviano","Sí, pero solo los políticos son culpables"],correct:1,fb:"Respuesta sólida (nivel C): conectar consumo global → demanda de productos baratos → explotación laboral → pobreza estructural. Ejemplo: industrias extractivas, cadenas de suministro globales. Relacionar con la brecha entre ricos y pobres mencionada en los documentos."},
+];
+
+let currentQ=0,score=0,answered=false,filteredQs=[],vocabVisible={};
+
+function showTab(t){
+  document.querySelectorAll('.tab').forEach((b,i)=>b.classList.toggle('active',['vocab','quiz','exam'][i]===t));
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.getElementById(t).classList.add('active');
+  if(t==='quiz')initQuiz();
+  if(t==='exam')renderExam();
+}
+
+function filterVocab(cat,btn){
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderVocab(cat);
+}
+
+function renderVocab(cat='all'){
+  const grid=document.getElementById('vocabGrid');
+  const items=cat==='all'?VOCAB:VOCAB.filter(v=>v.cat===cat);
+  grid.innerHTML=items.map((v,i)=>`
+    <div class="vocab-card${vocabVisible[v.es]?'':' hidden-de'}" onclick="toggleVocab('${v.es}')">
+      <div class="vocab-cat">${catLabel(v.cat)}</div>
+      <div class="vocab-es">${v.es}</div>
+      <div class="vocab-de">${v.de}</div>
+    </div>`).join('');
+}
+
+function catLabel(c){return{definicion:'Definition',causas:'Ursachen',efectos:'Auswirkungen',soluciones:'Lösungen',opinion:'Meinung/Redemittel'}[c]||c}
+
+function toggleVocab(es){
+  vocabVisible[es]=!vocabVisible[es];
+  const cards=document.querySelectorAll('.vocab-card');
+  cards.forEach(c=>{if(c.querySelector('.vocab-es').textContent===es)c.classList.toggle('hidden-de',!vocabVisible[es])});
+}
+
+function initQuiz(){
+  const lvl=document.getElementById('levelSel').value;
+  filteredQs=shuffle(lvl==='all'?[...QUESTIONS]:QUESTIONS.filter(q=>q.lvl===lvl)).slice(0,10);
+  currentQ=0;score=0;answered=false;
+  renderQ();
+}
+
+function shuffle(a){return a.sort(()=>Math.random()-0.5)}
+
+function renderQ(){
+  const body=document.getElementById('quizBody');
+  const pf=document.getElementById('progressFill');
+  const pt=document.getElementById('progressTxt');
+  if(currentQ>=filteredQs.length){
+    const pct=Math.round(score/filteredQs.length*100);
+    body.innerHTML=`<div class="score-display">
+      <div class="score-num">${score}/${filteredQs.length}</div>
+      <div class="score-sub">${pct}% – ${pct>=80?'Sehr gut!':pct>=60?'Gut – noch etwas üben.':'Weiter üben – viel Erfolg!'}</div>
+      <button class="retry-btn" onclick="initQuiz()">Nochmal versuchen</button>
+    </div>`;
+    pf.style.width='100%';pt.textContent=`${filteredQs.length}/${filteredQs.length}`;return;
+  }
+  pf.style.width=(currentQ/filteredQs.length*100)+'%';
+  pt.textContent=`${currentQ}/${filteredQs.length}`;
+  const q=filteredQs[currentQ];answered=false;
+  body.innerHTML=`<div class="q-card">
+    <div class="q-level ${q.lvl}">Niveau ${q.lvl} – ${{A:'Reproduktion',B:'Analyse/Transfer',C:'Bewertung/Diskussion'}[q.lvl]}</div>
+    <div class="q-text">${q.q}</div>
+    <div class="opts">${q.opts.map((o,i)=>`<button class="opt" id="opt${i}" onclick="checkAnswer(${i})">${o}</button>`).join('')}</div>
+    <div id="feedback"></div>
+  </div>`;
+}
+
+function checkAnswer(i){
+  if(answered)return;answered=true;
+  const q=filteredQs[currentQ];
+  document.querySelectorAll('.opt').forEach((b,j)=>{
+    b.disabled=true;
+    if(j===q.correct)b.classList.add(i===j?'correct':'reveal');
+    else if(j===i)b.classList.add('wrong');
+  });
+  if(i===q.correct)score++;
+  const fb=document.getElementById('feedback');
+  fb.className='feedback '+(i===q.correct?'correct':'wrong');
+  fb.innerHTML=(i===q.correct?'Richtig. ':'Falsch. ')+q.fb+`<br><button class="next-btn" onclick="nextQ()">${currentQ+1<filteredQs.length?'Nächste Frage →':'Ergebnis anzeigen →'}</button>`;
+}
+
+function nextQ(){currentQ++;renderQ()}
+
+const EXAM_QS = [
+  {type:"Teil 1 – Monolog",lvl:"B/C",q:"Beschreibe und analysiere das Schicksal der gamines in Lateinamerika anhand des vorliegenden Materials. Gehe auf Ursachen, Formen und Folgen ein.",tip:"Struktur: Kurze Einleitung (Was ist das Thema?) → Ursachen (Armut, Familiengewalt) → Formen der Arbeit (leicht/gefährlich) → Folgen (Kriminalität, Rechtsverletzungen) → kurzer Ausblick."},
+  {type:"Teil 1 – Monolog",lvl:"B/C",q:"Erkläre das bolivianische Jugendarbeitsgesetz und stelle die Argumente dafür und dagegen dar.",tip:"Nenne zunächst den Inhalt des Gesetzes (ab 10 Jahren, max. 6 Stunden, freiwillig), dann strukturiert Argumente a favor / en contra. Schließe mit einer Einschätzung."},
+  {type:"Teil 2 – Gespräch",lvl:"C",q:"¿Crees que la legalización del trabajo infantil en Bolivia es una solución eficaz al problema de la pobreza? ¿Por qué sí o por qué no?",tip:"Nimm eine klare Position ein und verteidige sie. Nutze Redemittel: 'Desde mi punto de vista…', 'aunque entiendo que…', 'sin embargo…'. Zeige, dass du beide Seiten kennst."},
+  {type:"Teil 2 – Gespräch",lvl:"C",q:"¿Cuál es la responsabilidad de la sociedad global frente al sufrimiento de los niños de la calle?",tip:"Verbinde globale Wirtschaftsstrukturen (Konsum, Lieferketten) mit lokaler Armut. Schlage konkrete Maßnahmen vor: apoyo a ONGs, comercio justo, presión política."},
+  {type:"Teil 2 – Gespräch",lvl:"C",q:"¿Son suficientes las medidas de las organizaciones como CARE o la Fundación Pro Niños para resolver el problema estructural?",tip:"Kritische Einschätzung: estas organizaciones hacen un trabajo valioso, pero no atacan las causas estructurales (pobreza, desigualdad). Se necesitan cambios políticos y económicos."},
+  {type:"Sprachmittlung",lvl:"B",q:"Tu amigo alemán ha leído sobre la ley boliviana y dice: 'Hay que prohibir el trabajo infantil en todo el mundo sin excepciones.' Explícale en español por qué esta posición, aunque comprensible, ignora la realidad de muchas familias.",tip:"Hier musst du eine andere Perspektive erklären, ohne deine eigene Meinung zu verlieren. Nutze: 'Entiendo tu posición, sin embargo…', 'hay que tener en cuenta que…'"},
+];
+
+function renderExam(){
+  const body=document.getElementById('examBody');
+  body.innerHTML=EXAM_QS.map((q,i)=>`
+    <div class="q-sample">
+      <div class="q-sample-head">
+        <span class="q-sample-type">${q.type}</span>
+        <span class="q-sample-lvl">Anforderungsbereich ${q.lvl}</span>
+      </div>
+      <div class="q-sample-q">${q.q}</div>
+      <div class="q-sample-tip">${q.tip}</div>
+      <button class="sendprompt-btn" onclick="sendPrompt('Hilf mir, diese Prüfungsfrage auf Spanisch zu beantworten: ${q.q.replace(/'/g,"\\'")}')">Mit Claude üben ↗</button>
+    </div>`).join('');
+}
+
+renderVocab();
+</script>
