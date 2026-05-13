@@ -1,109 +1,586 @@
-
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>La Pobreza Infantil — Spanisch Abitur</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Exo+2:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:var(--font-sans)}
-.app{padding:1.5rem 0;max-width:680px}
-.tabs{display:flex;gap:4px;margin-bottom:1.5rem;border-bottom:0.5px solid var(--color-border-tertiary);padding-bottom:0}
-.tab{padding:8px 16px;font-size:14px;font-weight:500;cursor:pointer;border:none;background:transparent;color:var(--color-text-secondary);border-bottom:2px solid transparent;margin-bottom:-1px}
-.tab.active{color:var(--color-text-primary);border-bottom-color:var(--color-text-primary)}
-.tab:hover{color:var(--color-text-primary)}
-.section{display:none}.section.active{display:block}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 
-.vocab-filter{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1rem}
-.filter-btn{padding:4px 12px;font-size:13px;border:0.5px solid var(--color-border-secondary);border-radius:99px;cursor:pointer;background:transparent;color:var(--color-text-secondary)}
-.filter-btn.active{background:var(--color-background-secondary);color:var(--color-text-primary);border-color:var(--color-border-primary)}
-.vocab-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.vocab-card{padding:10px 14px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);background:var(--color-background-primary);cursor:pointer;transition:background 0.15s}
-.vocab-card:hover{background:var(--color-background-secondary)}
-.vocab-es{font-size:15px;font-weight:500;color:var(--color-text-primary)}
-.vocab-de{font-size:13px;color:var(--color-text-secondary);margin-top:2px}
-.vocab-cat{font-size:11px;color:#1D9E75;font-weight:500;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:4px}
-.hidden-de .vocab-de{display:none}
-.reveal-hint{font-size:12px;color:var(--color-text-tertiary);margin-bottom:8px}
+:root{
+  --bg-base:#080C18;
+  --bg-surface:#0E1424;
+  --bg-panel:#141C30;
+  --bg-card:#1A2340;
+  --bg-hover:#1F2B4D;
 
-.quiz-meta{display:flex;gap:12px;align-items:center;margin-bottom:1rem}
-.level-sel{font-size:14px;padding:6px 10px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md)}
-.progress-bar{flex:1;height:4px;background:var(--color-background-secondary);border-radius:2px;overflow:hidden}
-.progress-fill{height:100%;background:#1D9E75;transition:width 0.3s;border-radius:2px}
-.progress-txt{font-size:13px;color:var(--color-text-secondary);white-space:nowrap}
+  --c-cyan:#00CFFF;
+  --c-purple:#8B5CF6;
+  --c-gold:#FFD700;
+  --c-orange:#FF7A30;
+  --c-green:#00E676;
+  --c-red:#FF3B5C;
+  --c-yellow:#FFE066;
 
-.q-card{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1.25rem;background:var(--color-background-primary);margin-bottom:1rem}
-.q-level{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px}
-.q-level.A{color:#3B6D11}.q-level.B{color:#185FA5}.q-level.C{color:#993C1D}
-.q-text{font-size:15px;color:var(--color-text-primary);line-height:1.6;margin-bottom:1rem}
-.opts{display:flex;flex-direction:column;gap:6px}
-.opt{padding:10px 14px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);cursor:pointer;font-size:14px;text-align:left;background:var(--color-background-primary);color:var(--color-text-primary);transition:background 0.1s}
-.opt:hover:not(:disabled){background:var(--color-background-secondary)}
-.opt.correct{background:#EAF3DE;border-color:#639922;color:#27500A}
-.opt.wrong{background:#FCEBEB;border-color:#A32D2D;color:#501313}
-.opt.reveal{background:#E6F1FB;border-color:#185FA5;color:#042C53}
-.feedback{padding:10px 14px;border-radius:var(--border-radius-md);font-size:14px;margin-top:8px;line-height:1.5}
-.feedback.correct{background:#EAF3DE;color:#27500A}
-.feedback.wrong{background:#FCEBEB;color:#501313}
-.next-btn{margin-top:12px;width:100%}
-.score-display{text-align:center;padding:2rem;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg)}
-.score-num{font-size:48px;font-weight:500;color:var(--color-text-primary)}
-.score-sub{font-size:15px;color:var(--color-text-secondary);margin-top:4px}
-.retry-btn{margin-top:1rem}
+  --text-1:#E2ECFF;
+  --text-2:#7A90B8;
+  --text-3:#3D4F6E;
 
-.exam-intro{background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;margin-bottom:1rem;font-size:14px;line-height:1.7;color:var(--color-text-secondary)}
-.exam-intro strong{color:var(--color-text-primary);font-weight:500}
-.q-sample{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1.25rem;margin-bottom:12px}
-.q-sample-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}
-.q-sample-type{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.05em;color:var(--color-text-secondary)}
-.q-sample-lvl{font-size:11px;padding:2px 8px;border-radius:99px;background:var(--color-background-info);color:var(--color-text-info)}
-.q-sample-q{font-size:15px;color:var(--color-text-primary);line-height:1.6;margin-bottom:8px}
-.q-sample-tip{font-size:13px;color:var(--color-text-secondary);font-style:italic;border-left:2px solid var(--color-border-secondary);padding-left:10px;margin-top:8px}
-.sendprompt-btn{font-size:13px;color:var(--color-text-info);border:none;background:none;cursor:pointer;padding:0;margin-top:6px}
-.sendprompt-btn:hover{text-decoration:underline}
+  --border-1:rgba(0,207,255,0.10);
+  --border-2:rgba(0,207,255,0.32);
+
+  --shadow-panel:0 4px 24px rgba(0,0,0,0.45),inset 0 1px 0 rgba(0,207,255,0.06);
+  --glow-cyan:0 0 18px rgba(0,207,255,0.28);
+  --glow-gold:0 0 14px rgba(255,215,0,0.45);
+  --glow-green:0 0 18px rgba(0,230,118,0.32);
+  --glow-red:0 0 18px rgba(255,59,92,0.32);
+
+  --r-sm:4px;--r-md:8px;--r-lg:12px;
+  --hud:56px;
+  --ui:'Chakra Petch',sans-serif;
+  --body:'Exo 2',sans-serif;
+  --t:0.17s ease;
+}
+
+[data-theme="light"]{
+  --bg-base:#E8EDF8;
+  --bg-surface:#F2F6FF;
+  --bg-panel:#FFFFFF;
+  --bg-card:#EEF3FF;
+  --bg-hover:#E4EBFF;
+  --c-cyan:#0073CC;
+  --c-purple:#6D28D9;
+  --text-1:#0A1128;
+  --text-2:#3A4A6A;
+  --text-3:#8A9DC0;
+  --border-1:rgba(0,80,200,0.09);
+  --border-2:rgba(0,80,200,0.28);
+  --shadow-panel:0 4px 24px rgba(0,0,60,0.07),inset 0 1px 0 rgba(255,255,255,0.9);
+  --glow-cyan:0 0 18px rgba(0,115,204,0.18);
+}
+
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--body);
+  background:var(--bg-base);
+  color:var(--text-1);
+  min-height:100vh;
+  background-image:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,0.025) 3px,rgba(0,0,0,0.025) 4px);
+}
+
+/* ── HUD ─────────────────────────────────────── */
+.hud{
+  position:fixed;top:0;left:0;right:0;
+  height:var(--hud);
+  background:var(--bg-surface);
+  border-bottom:1px solid var(--border-1);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 20px;z-index:100;
+  box-shadow:0 2px 20px rgba(0,0,0,0.35);
+}
+.hud::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--c-cyan),var(--c-purple),var(--c-orange));
+}
+.hud-brand{
+  font-family:var(--ui);font-weight:700;font-size:13px;
+  letter-spacing:.06em;color:var(--c-cyan);text-transform:uppercase;
+  display:flex;align-items:center;gap:8px;
+}
+.hud-brand-gem{
+  font-size:17px;color:var(--c-gold);
+  filter:drop-shadow(0 0 6px var(--c-gold));
+  animation:gemPulse 2.5s ease-in-out infinite;
+}
+@keyframes gemPulse{
+  0%,100%{transform:scale(1)}
+  50%{transform:scale(1.18);filter:drop-shadow(0 0 10px var(--c-gold)) brightness(1.3)}
+}
+.hud-right{display:flex;align-items:center;gap:12px}
+
+.hud-streak{
+  font-family:var(--ui);font-size:11px;font-weight:700;
+  color:var(--c-yellow);background:rgba(255,224,102,0.1);
+  border:1px solid rgba(255,224,102,0.25);
+  padding:3px 9px;border-radius:var(--r-sm);display:none;
+}
+.hud-streak.on{display:block}
+
+.hud-lv{
+  font-family:var(--ui);font-size:11px;font-weight:700;
+  letter-spacing:.07em;color:var(--c-orange);
+  background:rgba(255,122,48,0.1);
+  border:1px solid rgba(255,122,48,0.28);
+  padding:3px 10px;border-radius:var(--r-sm);white-space:nowrap;
+}
+.hud-lv span{font-size:14px}
+
+.hud-xp{display:flex;align-items:center;gap:7px}
+.xp-bar{
+  width:110px;height:5px;
+  background:var(--bg-card);border-radius:3px;
+  overflow:hidden;border:1px solid var(--border-1);
+}
+.xp-fill{
+  height:100%;width:0%;
+  background:linear-gradient(90deg,var(--c-cyan),var(--c-purple));
+  border-radius:3px;
+  transition:width .5s cubic-bezier(.4,0,.2,1);
+  box-shadow:0 0 8px rgba(0,207,255,.5);
+}
+.xp-txt{
+  font-family:var(--ui);font-size:10px;color:var(--text-2);
+  white-space:nowrap;letter-spacing:.02em;
+}
+
+.hud-coins{
+  font-family:var(--ui);font-weight:800;font-size:14px;
+  color:var(--c-gold);text-shadow:var(--glow-gold);
+  display:flex;align-items:center;gap:5px;min-width:55px;
+}
+
+.btn-theme{
+  background:var(--bg-card);border:1px solid var(--border-1);
+  color:var(--text-2);width:30px;height:30px;border-radius:var(--r-sm);
+  cursor:pointer;font-size:14px;display:flex;align-items:center;
+  justify-content:center;transition:var(--t);
+}
+.btn-theme:hover{border-color:var(--border-2);color:var(--c-cyan);box-shadow:var(--glow-cyan)}
+
+/* ── LAYOUT ──────────────────────────────────── */
+.wrap{
+  max-width:720px;margin:0 auto;
+  padding:calc(var(--hud) + 18px) 14px 50px;
+}
+
+/* ── NAV TABS ────────────────────────────────── */
+.nav{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:4px;
+  background:var(--bg-surface);border:1px solid var(--border-1);
+  border-radius:var(--r-md);padding:4px;margin-bottom:18px;
+}
+.nav-btn{
+  font-family:var(--ui);font-size:11px;font-weight:700;
+  letter-spacing:.06em;text-transform:uppercase;
+  color:var(--text-2);background:transparent;
+  border:1px solid transparent;border-radius:6px;
+  padding:9px 6px;cursor:pointer;transition:var(--t);
+  display:flex;align-items:center;justify-content:center;gap:6px;
+}
+.nav-btn:hover{color:var(--text-1);background:var(--bg-hover);border-color:var(--border-1)}
+.nav-btn.on{color:var(--c-cyan);background:var(--bg-panel);border-color:var(--border-2);box-shadow:var(--glow-cyan)}
+
+/* ── SECTIONS ────────────────────────────────── */
+.sec{display:none}
+.sec.on{display:block;animation:secIn .2s ease}
+@keyframes secIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── VOCAB ───────────────────────────────────── */
+.v-filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.fb{
+  font-family:var(--ui);font-size:9px;font-weight:700;
+  letter-spacing:.07em;text-transform:uppercase;
+  color:var(--text-2);background:var(--bg-card);
+  border:1px solid var(--border-1);border-radius:var(--r-sm);
+  padding:5px 11px;cursor:pointer;transition:var(--t);
+}
+.fb:hover{color:var(--text-1);border-color:var(--border-2)}
+.fb.on{color:var(--c-cyan);background:rgba(0,207,255,.07);border-color:var(--c-cyan);box-shadow:0 0 8px rgba(0,207,255,.14)}
+
+.v-hint{font-size:11px;color:var(--text-3);margin-bottom:11px;font-style:italic}
+.v-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+
+.vc{
+  background:var(--bg-card);border:1px solid var(--border-1);
+  border-radius:var(--r-md);padding:12px 13px;
+  cursor:pointer;transition:transform .14s,box-shadow .14s,border-color .14s;
+  position:relative;overflow:hidden;
+}
+.vc::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  opacity:0;transition:opacity .14s;
+}
+.vc:hover{border-color:var(--border-2);transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.2),var(--glow-cyan)}
+.vc:hover::before,.vc.open::before{opacity:1}
+.vc[data-cat="definicion"]::before{background:var(--c-cyan)}
+.vc[data-cat="causas"]::before{background:var(--c-red)}
+.vc[data-cat="efectos"]::before{background:var(--c-orange)}
+.vc[data-cat="soluciones"]::before{background:var(--c-green)}
+.vc[data-cat="opinion"]::before{background:var(--c-purple)}
+
+.vc-cat{
+  font-family:var(--ui);font-size:9px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px;
+}
+.cat-definicion{color:var(--c-cyan)}
+.cat-causas{color:var(--c-red)}
+.cat-efectos{color:var(--c-orange)}
+.cat-soluciones{color:var(--c-green)}
+.cat-opinion{color:var(--c-purple)}
+
+.vc-es{font-size:13px;font-weight:600;color:var(--text-1);line-height:1.45}
+.vc-de{
+  font-size:12px;color:var(--text-2);margin-top:6px;line-height:1.4;
+  border-top:1px solid var(--border-1);padding-top:6px;
+  transition:opacity .2s,max-height .2s;max-height:60px;overflow:hidden;
+}
+.vc.shut .vc-de{opacity:0;max-height:0;margin-top:0;padding-top:0;border:none}
+.vc-tap{font-size:10px;color:var(--text-3);margin-top:4px;font-style:italic}
+.vc.open .vc-tap{display:none}
+
+/* ── QUIZ CONTROLS ───────────────────────────── */
+.qz-top{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.lvl-sel{
+  font-family:var(--ui);font-size:10px;font-weight:600;
+  letter-spacing:.03em;color:var(--text-1);background:var(--bg-card);
+  border:1px solid var(--border-1);border-radius:var(--r-sm);
+  padding:7px 9px;cursor:pointer;flex:1;appearance:none;
+}
+.lvl-sel:focus{outline:none;border-color:var(--border-2);box-shadow:var(--glow-cyan)}
+.qz-prog{display:flex;align-items:center;gap:7px;flex:1}
+.qz-pbar{
+  flex:1;height:5px;background:var(--bg-card);
+  border-radius:3px;overflow:hidden;border:1px solid var(--border-1);
+}
+.qz-pfill{
+  height:100%;
+  background:linear-gradient(90deg,var(--c-cyan),var(--c-purple));
+  border-radius:3px;transition:width .4s ease;
+  box-shadow:0 0 6px rgba(0,207,255,.4);
+}
+.qz-ptxt{font-family:var(--ui);font-size:11px;font-weight:600;color:var(--text-2);white-space:nowrap}
+
+/* ── QUESTION CARD ───────────────────────────── */
+.qcard{
+  background:var(--bg-panel);border:1px solid var(--border-1);
+  border-radius:var(--r-lg);padding:18px;margin-bottom:10px;
+  box-shadow:var(--shadow-panel);
+}
+.qlvl{
+  display:inline-flex;align-items:center;gap:5px;
+  font-family:var(--ui);font-size:9px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;
+  padding:3px 9px;border-radius:var(--r-sm);margin-bottom:11px;
+}
+.qlvl.A{color:#7EC870;background:rgba(126,200,112,.1);border:1px solid rgba(126,200,112,.28)}
+.qlvl.B{color:#60A8E0;background:rgba(96,168,224,.1);border:1px solid rgba(96,168,224,.28)}
+.qlvl.C{color:#E07850;background:rgba(224,120,80,.1);border:1px solid rgba(224,120,80,.28)}
+.qtxt{font-size:14px;font-weight:500;color:var(--text-1);line-height:1.65;margin-bottom:14px}
+.opts{display:flex;flex-direction:column;gap:7px}
+
+.opt{
+  font-family:var(--body);font-size:13px;font-weight:500;
+  color:var(--text-1);background:var(--bg-card);
+  border:1px solid var(--border-1);border-radius:var(--r-md);
+  padding:10px 13px;text-align:left;cursor:pointer;
+  transition:all .14s;display:flex;align-items:flex-start;gap:9px;
+}
+.opt-idx{
+  font-family:var(--ui);font-size:9px;font-weight:700;
+  color:var(--text-3);background:var(--bg-surface);
+  border:1px solid var(--border-1);
+  width:20px;height:20px;line-height:20px;text-align:center;
+  border-radius:3px;flex-shrink:0;margin-top:1px;
+}
+.opt:hover:not(:disabled){border-color:var(--border-2);background:var(--bg-hover);transform:translateX(3px)}
+.opt.correct{border-color:var(--c-green);background:rgba(0,230,118,.07);animation:correctPop .35s ease}
+.opt.correct .opt-idx{background:rgba(0,230,118,.15);border-color:var(--c-green);color:var(--c-green)}
+.opt.wrong{border-color:var(--c-red);background:rgba(255,59,92,.07);animation:wrongShk .35s ease}
+.opt.wrong .opt-idx{background:rgba(255,59,92,.15);border-color:var(--c-red);color:var(--c-red)}
+.opt.reveal{border-color:var(--c-cyan);background:rgba(0,207,255,.05)}
+.opt.reveal .opt-idx{background:rgba(0,207,255,.12);border-color:var(--c-cyan);color:var(--c-cyan)}
+
+@keyframes correctPop{0%{transform:scale(1)}40%{transform:scale(1.02) translateX(3px)}100%{transform:scale(1) translateX(0)}}
+@keyframes wrongShk{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+
+.fb-box{margin-top:11px;padding:11px 13px;border-radius:var(--r-md);font-size:12px;line-height:1.65}
+.fb-box.ok{background:rgba(0,230,118,.06);border:1px solid rgba(0,230,118,.22);color:#5EE8A0}
+.fb-box.no{background:rgba(255,59,92,.06);border:1px solid rgba(255,59,92,.22);color:#FF8099}
+
+.btn-next,.btn-retry{
+  display:block;width:100%;margin-top:9px;
+  font-family:var(--ui);font-size:11px;font-weight:700;
+  letter-spacing:.08em;text-transform:uppercase;
+  color:var(--bg-base);background:var(--c-cyan);
+  border:none;border-radius:var(--r-md);padding:10px;
+  cursor:pointer;transition:all .15s;
+  box-shadow:0 4px 14px rgba(0,207,255,.25);
+}
+.btn-next:hover,.btn-retry:hover{background:#33D9FF;box-shadow:0 4px 22px rgba(0,207,255,.45);transform:translateY(-1px)}
+
+/* Score */
+.score-wrap{
+  text-align:center;padding:36px 20px;
+  background:var(--bg-panel);border:1px solid var(--border-1);
+  border-radius:var(--r-lg);box-shadow:var(--shadow-panel);
+}
+.score-lbl{font-family:var(--ui);font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--c-cyan);margin-bottom:6px}
+.score-big{font-family:var(--ui);font-size:60px;font-weight:800;color:var(--c-cyan);text-shadow:var(--glow-cyan);line-height:1}
+.score-sub{font-size:14px;color:var(--text-2);margin-top:7px}
+.score-coins{font-family:var(--ui);font-size:16px;font-weight:700;color:var(--c-gold);margin-top:10px;text-shadow:var(--glow-gold)}
+
+/* ── EXAM ────────────────────────────────────── */
+.ex-intro{
+  background:var(--bg-panel);border:1px solid var(--border-1);
+  border-left:3px solid var(--c-orange);border-radius:var(--r-md);
+  padding:13px 15px;margin-bottom:14px;
+  font-size:12px;line-height:1.75;color:var(--text-2);
+}
+.ex-intro strong{color:var(--text-1);font-weight:600}
+
+.eq{
+  background:var(--bg-panel);border:1px solid var(--border-1);
+  border-radius:var(--r-lg);overflow:hidden;margin-bottom:9px;
+  box-shadow:var(--shadow-panel);transition:border-color .15s;
+}
+.eq:hover{border-color:var(--border-2)}
+.eq-head{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:7px 14px;background:var(--bg-surface);border-bottom:1px solid var(--border-1);
+}
+.eq-type{font-family:var(--ui);font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-2)}
+.eq-lvl{
+  font-family:var(--ui);font-size:9px;font-weight:600;letter-spacing:.04em;
+  padding:2px 8px;border-radius:99px;
+  background:rgba(0,207,255,.09);border:1px solid rgba(0,207,255,.22);color:var(--c-cyan);
+}
+.eq-body{padding:13px 15px}
+.eq-q{font-size:13px;font-weight:500;color:var(--text-1);line-height:1.65;margin-bottom:9px}
+.eq-tip{
+  font-size:12px;color:var(--text-2);font-style:italic;
+  border-left:2px solid var(--c-purple);padding-left:9px;line-height:1.6;
+}
+.btn-claude{
+  display:inline-flex;align-items:center;gap:4px;margin-top:9px;
+  font-family:var(--ui);font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--c-cyan);background:rgba(0,207,255,.07);
+  border:1px solid rgba(0,207,255,.2);border-radius:var(--r-sm);
+  padding:5px 10px;cursor:pointer;transition:var(--t);
+}
+.btn-claude:hover{background:rgba(0,207,255,.14);border-color:var(--c-cyan);box-shadow:var(--glow-cyan)}
+
+/* ── FLOATING REWARDS ────────────────────────── */
+.float-coin,.float-xp{
+  position:fixed;pointer-events:none;z-index:9999;
+  font-family:var(--ui);font-weight:800;white-space:nowrap;
+  animation:floatUp 1.1s ease-out forwards;
+}
+.float-coin{font-size:14px;color:var(--c-gold);text-shadow:var(--glow-gold)}
+.float-xp{font-size:11px;color:var(--c-cyan)}
+@keyframes floatUp{
+  0%{opacity:1;transform:translateY(0) scale(1)}
+  60%{opacity:1;transform:translateY(-48px) scale(1.1)}
+  100%{opacity:0;transform:translateY(-80px) scale(.9)}
+}
+
+/* ── LEVEL UP ────────────────────────────────── */
+.lvlup{
+  position:fixed;inset:0;background:rgba(0,0,0,.82);
+  z-index:1000;display:flex;align-items:center;justify-content:center;
+  animation:lvFade .3s ease;
+}
+.lvlup.off{display:none}
+@keyframes lvFade{from{opacity:0}to{opacity:1}}
+.lvlup-card{
+  background:var(--bg-panel);border:2px solid var(--c-gold);
+  border-radius:16px;padding:36px 56px;text-align:center;
+  box-shadow:0 0 60px rgba(255,215,0,.35),var(--shadow-panel);
+  animation:lvCard .38s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes lvCard{from{transform:scale(.5);opacity:0}to{transform:scale(1);opacity:1}}
+.lvlup-label{font-family:var(--ui);font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--c-gold);margin-bottom:6px}
+.lvlup-num{font-family:var(--ui);font-size:68px;font-weight:800;color:var(--text-1);line-height:1;text-shadow:var(--glow-gold)}
+.lvlup-sub{font-size:14px;color:var(--text-2);margin-top:6px}
+
+/* ── STREAK BANNER ───────────────────────────── */
+.streak-banner{
+  position:fixed;top:calc(var(--hud) + 10px);right:16px;
+  background:var(--bg-panel);border:1px solid var(--c-yellow);
+  border-radius:var(--r-md);padding:7px 14px;
+  font-family:var(--ui);font-size:11px;font-weight:700;
+  color:var(--c-yellow);box-shadow:0 0 18px rgba(255,224,102,.22);
+  z-index:500;animation:bannerIn .3s ease;
+}
+.streak-banner.off{display:none}
+@keyframes bannerIn{from{transform:translateX(110%);opacity:0}to{transform:translateX(0);opacity:1}}
+
+/* ── SCROLLBAR ───────────────────────────────── */
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:var(--bg-base)}
+::-webkit-scrollbar-thumb{background:var(--border-1);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:var(--border-2)}
+
+@media(max-width:480px){
+  .v-grid{grid-template-columns:1fr}
+  .hud-xp{display:none}
+  .hud-brand span{display:none}
+}
 </style>
+</head>
+<body>
 
-<h2 class="sr-only" style="position:absolute;left:-9999px">Spanisch Abitur Vorbereitung – Gamines und Kinderarbeit</h2>
-<div class="app">
-<div class="tabs">
-  <button class="tab active" onclick="showTab('vocab')">Vokabeln</button>
-  <button class="tab" onclick="showTab('quiz')">Quiz</button>
-  <button class="tab" onclick="showTab('exam')">Prüfungsfragen</button>
-</div>
-
-<div id="vocab" class="section active">
-  <p class="reveal-hint">Auf eine Karte klicken, um die Übersetzung ein-/auszublenden.</p>
-  <div class="vocab-filter">
-    <button class="filter-btn active" onclick="filterVocab('all',this)">Alle</button>
-    <button class="filter-btn" onclick="filterVocab('definicion',this)">Definition</button>
-    <button class="filter-btn" onclick="filterVocab('causas',this)">Ursachen</button>
-    <button class="filter-btn" onclick="filterVocab('efectos',this)">Auswirkungen</button>
-    <button class="filter-btn" onclick="filterVocab('soluciones',this)">Lösungen</button>
-    <button class="filter-btn" onclick="filterVocab('opinion',this)">Meinung</button>
+<!-- HUD -->
+<header class="hud">
+  <div class="hud-brand">
+    <span class="hud-brand-gem">◈</span>
+    <span>La Pobreza Infantil</span>
   </div>
-  <div class="vocab-grid" id="vocabGrid"></div>
+  <div class="hud-right">
+    <div class="hud-streak" id="hudStreak">🔥 <span id="sNum">0</span> RACHA</div>
+    <div class="hud-lv">LVL <span id="lvNum">1</span></div>
+    <div class="hud-xp">
+      <div class="xp-bar"><div class="xp-fill" id="xpFill"></div></div>
+      <span class="xp-txt" id="xpTxt">0/100 XP</span>
+    </div>
+    <div class="hud-coins">◈ <span id="coinN">0</span></div>
+    <button class="btn-theme" id="btnTheme" title="Tema">☀</button>
+  </div>
+</header>
+
+<!-- Level Up Overlay -->
+<div class="lvlup off" id="lvlup" onclick="this.classList.add('off')">
+  <div class="lvlup-card">
+    <div class="lvlup-label">✦ Level Up ✦</div>
+    <div class="lvlup-num" id="lvlupN">2</div>
+    <div class="lvlup-sub">¡Excelente progreso!</div>
+  </div>
 </div>
 
-<div id="quiz" class="section">
-  <div class="quiz-meta">
-    <select class="level-sel" id="levelSel" onchange="initQuiz()">
-      <option value="A">Niveau A – Reproduktion</option>
-      <option value="B">Niveau B – Analyse</option>
-      <option value="C">Niveau C – Bewertung</option>
-      <option value="all">Alle Niveaus gemischt</option>
-    </select>
-    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
-    <span class="progress-txt" id="progressTxt">0/10</span>
-  </div>
-  <div id="quizBody"></div>
-</div>
+<!-- Streak Banner -->
+<div class="streak-banner off" id="sBanner">🔥 ¡RACHA DE <span id="sBannerN">3</span>!</div>
 
-<div id="exam" class="section">
-  <div class="exam-intro">
-    <strong>NRW mündliche Abiturprüfung Spanisch:</strong> 30 Min. Vorbereitung, 20–30 Min. Prüfung.<br>
-    Teil 1 (10–15 Min.): Monologisches Sprechen zu einem Impuls/Text. Teil 2 (10–15 Min.): Prüfungsgespräch mit Diskussion.<br>
-    Bewertet werden: inhaltliche Kompetenz, sprachliche Korrektheit, Aussprache/Intonation und interkulturelle Reflexion.
-  </div>
-  <div id="examBody"></div>
-</div>
+<div class="wrap">
+
+  <!-- Nav -->
+  <nav class="nav">
+    <button class="nav-btn on"  onclick="showTab('vocab',this)">📚 Vokabeln</button>
+    <button class="nav-btn"     onclick="showTab('quiz',this)">⚡ Quiz</button>
+    <button class="nav-btn"     onclick="showTab('exam',this)">📋 Prüfung</button>
+  </nav>
+
+  <!-- VOCAB -->
+  <section id="vocab" class="sec on">
+    <div class="v-filters">
+      <button class="fb on" onclick="filt('all',this)">Alle</button>
+      <button class="fb" onclick="filt('definicion',this)">Definición</button>
+      <button class="fb" onclick="filt('causas',this)">Causas</button>
+      <button class="fb" onclick="filt('efectos',this)">Efectos</button>
+      <button class="fb" onclick="filt('soluciones',this)">Soluciones</button>
+      <button class="fb" onclick="filt('opinion',this)">Opinión</button>
+    </div>
+    <p class="v-hint">Klick auf eine Karte um die Übersetzung zu enthüllen — +2 ◈</p>
+    <div class="v-grid" id="vGrid"></div>
+  </section>
+
+  <!-- QUIZ -->
+  <section id="quiz" class="sec">
+    <div class="qz-top">
+      <select class="lvl-sel" id="lvlSel" onchange="startQuiz()">
+        <option value="A">Niveau A — Reproduktion</option>
+        <option value="B">Niveau B — Analyse</option>
+        <option value="C">Niveau C — Bewertung</option>
+        <option value="all">Alle Niveaus gemischt</option>
+      </select>
+      <div class="qz-prog">
+        <div class="qz-pbar"><div class="qz-pfill" id="qPFill" style="width:0%"></div></div>
+        <span class="qz-ptxt" id="qPTxt">0/10</span>
+      </div>
+    </div>
+    <div id="qBody"></div>
+  </section>
+
+  <!-- EXAM -->
+  <section id="exam" class="sec">
+    <div class="ex-intro">
+      <strong>NRW mündliche Abiturprüfung Spanisch:</strong> 30 Min. Vorbereitung, 20–30 Min. Prüfung.<br>
+      Teil 1 (10–15 Min.): Monologisches Sprechen zu einem Impuls/Text. Teil 2 (10–15 Min.): Prüfungsgespräch.<br>
+      Bewertet: inhaltliche Kompetenz, sprachliche Korrektheit, Aussprache und interkulturelle Reflexion.
+    </div>
+    <div id="exBody"></div>
+  </section>
+
 </div>
 
 <script>
+// ── GAME STATE ──────────────────────────────────
+const G = { coins:0, xp:0, level:1, streak:0, seen:new Set() };
+
+function xpNeeded(lvl){ return lvl * 100; }
+
+function reward(c, x, el){
+  G.coins += c; G.xp += x;
+  hud();
+  if(el){
+    const r = el.getBoundingClientRect();
+    const cx = r.left + r.width/2, cy = r.top;
+    if(c > 0) spawn(`+${c} ◈`, cx, cy, 'float-coin');
+    if(x > 0) spawn(`+${x} XP`, cx+40, cy+10, 'float-xp');
+  }
+  levelCheck();
+}
+
+function levelCheck(){
+  const need = xpNeeded(G.level);
+  if(G.xp >= need){
+    G.xp -= need; G.level++;
+    document.getElementById('lvlupN').textContent = G.level;
+    const ol = document.getElementById('lvlup');
+    ol.classList.remove('off');
+    clearTimeout(ol._t);
+    ol._t = setTimeout(()=> ol.classList.add('off'), 2800);
+    hud();
+  }
+}
+
+function hud(){
+  document.getElementById('coinN').textContent = G.coins;
+  document.getElementById('lvNum').textContent = G.level;
+  const need = xpNeeded(G.level);
+  const pct = Math.min(100, G.xp / need * 100);
+  document.getElementById('xpFill').style.width = pct + '%';
+  document.getElementById('xpTxt').textContent = `${G.xp}/${need} XP`;
+  const hs = document.getElementById('hudStreak');
+  if(G.streak >= 2){ hs.classList.add('on'); document.getElementById('sNum').textContent = G.streak; }
+  else { hs.classList.remove('on'); }
+}
+
+function spawn(txt, x, y, cls){
+  const el = document.createElement('div');
+  el.className = cls; el.textContent = txt;
+  el.style.cssText = `left:${x}px;top:${y}px`;
+  document.body.appendChild(el);
+  el.addEventListener('animationend', ()=> el.remove());
+}
+
+function showStreak(n){
+  const b = document.getElementById('sBanner');
+  document.getElementById('sBannerN').textContent = n;
+  b.classList.remove('off');
+  clearTimeout(b._t);
+  b._t = setTimeout(()=> b.classList.add('off'), 1900);
+}
+
+// ── THEME ──────────────────────────────────────
+let dark = true;
+document.getElementById('btnTheme').onclick = function(){
+  dark = !dark;
+  document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+  this.textContent = dark ? '☀' : '🌙';
+};
+
+// ── TABS ───────────────────────────────────────
+function showTab(id, btn){
+  document.querySelectorAll('.nav-btn').forEach(b=> b.classList.remove('on'));
+  btn.classList.add('on');
+  document.querySelectorAll('.sec').forEach(s=> s.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  if(id==='quiz') startQuiz();
+  if(id==='exam') renderExam();
+}
+
+// ── VOCAB DATA ─────────────────────────────────
 const VOCAB = [
   {es:"el trabajo infantil",de:"die Kinderarbeit",cat:"definicion"},
   {es:"el/la gamin/a",de:"Straßenkind (Kolumbien/Lateinamerika)",cat:"definicion"},
@@ -111,6 +588,8 @@ const VOCAB = [
   {es:"privar a alguien de algo",de:"jemanden um etwas berauben",cat:"definicion"},
   {es:"el desarrollo físico y psicológico",de:"die körperliche und psychische Entwicklung",cat:"definicion"},
   {es:"vulnerar los derechos",de:"Rechte verletzen",cat:"definicion"},
+  {es:"la ley del trabajo juvenil",de:"das Jugendarbeitsgesetz",cat:"definicion"},
+  {es:"promulgar una ley",de:"ein Gesetz erlassen",cat:"definicion"},
   {es:"la brecha entre ricos y pobres",de:"die Schere zwischen Arm und Reich",cat:"causas"},
   {es:"la pobreza",de:"die Armut",cat:"causas"},
   {es:"la violencia familiar",de:"häusliche Gewalt",cat:"causas"},
@@ -124,6 +603,7 @@ const VOCAB = [
   {es:"traficar drogas",de:"mit Drogen handeln",cat:"efectos"},
   {es:"formar bandadas",de:"sich Banden anschließen",cat:"efectos"},
   {es:"problemas al nivel emocional y social",de:"Probleme auf emotionaler und sozialer Ebene",cat:"efectos"},
+  {es:"un retroceso",de:"ein Rückschritt",cat:"efectos"},
   {es:"la organización humanitaria",de:"die humanitäre Organisation",cat:"soluciones"},
   {es:"la ONG",de:"die NGO / Nichtregierungsorganisation",cat:"soluciones"},
   {es:"la alimentación balanceada",de:"ausgewogene Ernährung",cat:"soluciones"},
@@ -139,130 +619,147 @@ const VOCAB = [
   {es:"sin embargo / no obstante",de:"dennoch / trotzdem",cat:"opinion"},
   {es:"en lugar de + inf.",de:"anstatt zu…",cat:"opinion"},
   {es:"aunque + ind./subj.",de:"obwohl / auch wenn",cat:"opinion"},
-  {es:"la ley del trabajo juvenil",de:"das Jugendarbeitsgesetz",cat:"definicion"},
-  {es:"promulgar una ley",de:"ein Gesetz erlassen",cat:"definicion"},
-  {es:"un retroceso",de:"ein Rückschritt",cat:"efectos"},
 ];
 
-const QUESTIONS = [
-  {lvl:"A",q:"¿Cómo se define el trabajo infantil según los documentos?",opts:["Todo trabajo que priva a los niños de su niñez, potencial y dignidad, perjudicial para su desarrollo","Cualquier trabajo realizado por menores de 18 años en fábricas","Solo el trabajo en minas y agricultura","El trabajo no remunerado de menores"],correct:0,fb:"Definición exacta del texto: trabajo que priva de niñez, potencial y dignidad, dañino para el desarrollo físico y psicológico."},
-  {lvl:"A",q:"¿Cuáles son tres trabajos que ejercen los niños para sobrevivir?",opts:["Limpian zapatos, venden caramelos, cuidan autos","Trabajan en oficinas, hoteles y supermercados","Estudian y practican deportes profesionales","Trabajan solo en la agricultura"],correct:0,fb:"Según el documento: limpiar zapatos/cristales, vender caramelos/periódicos/drogas, cuidar autos, etc."},
-  {lvl:"A",q:"¿Cuántas etapas tiene el programa de la Fundación Pro Niños?",opts:["Dos etapas","Tres etapas","Cuatro etapas","Una etapa con varios pasos"],correct:1,fb:"Tres etapas: 1) establecer confianza, 2) mostrar que la vida puede ser diferente, 3) que el niño tome la decisión de cambiar."},
-  {lvl:"A",q:"¿Qué derechos fundamentales son vulnerados según los documentos?",opts:["Educación gratuita, atención médica, vivir en paz, protección ante la explotación","Solo el derecho a la educación","Solo el derecho a no trabajar","El derecho al voto y a la propiedad"],correct:0,fb:"Listados en el documento: educación, atención médica, amor/comprensión, vivir en paz, apoyo y protección ante violación/abandono/explotación."},
-  {lvl:"B",q:"¿Por qué muchos jóvenes se unen a bandas peligrosas? Explica la causa principal.",opts:["Porque quieren dinero fácil sin esfuerzo","Porque sufren violencia familiar y buscan una familia sustituta con cariño y protección","Porque las bandas les ofrecen educación","Porque el Estado los obliga a unirse"],correct:1,fb:"El texto señala que estos niños frecuentemente sufren violencia familiar y quieren escapar de su realidad → buscan familia, cariño y protección en las bandas."},
-  {lvl:"B",q:"¿Por qué Bolivia legalizó el trabajo infantil desde los 10 años? Menciona dos razones.",opts:["Para aumentar el PIB y atraer inversión extranjera","Porque hay un millón de trabajadores menores y es imposible prohibirlo; se necesita regularlo para evitar abusos","Porque los niños prefieren trabajar a estudiar","Porque la ONU lo exige"],correct:1,fb:"Razones del texto: hay un millón de trabajadores menores en el país (realidad innegable), es imposible prohibirlo, y es necesario regularlo para evitar abusos y proteger a los niños."},
-  {lvl:"B",q:"¿Cuál es la crítica principal contra la ley boliviana, según los organismos internacionales?",opts:["Que las horas de trabajo son demasiado pocas","Que Bolivia es el único país del mundo que permite el trabajo infantil, y no se puede controlar su cumplimiento","Que la ley no incluye a los menores de 10 años","Que los salarios son demasiado altos"],correct:1,fb:"Críticas: Bolivia es el único país del mundo con esta ley (retroceso), no se puede controlar que se cumplen los 6 horas, no se puede evitar abusos → no ayuda a disminuir el trabajo infantil."},
-  {lvl:"B",q:"¿Por qué son necesarios muchos programas y etapas para ayudar a los gamines?",opts:["Porque los programas son muy caros y complicados","Porque los niños tienen muchos problemas emocionales y sociales; deben reconstruir su confianza y tomar la decisión ellos mismos","Porque el gobierno lo exige así","Porque los niños no quieren cambiar"],correct:1,fb:"El texto explica: los niños tienen problemas emocionales y sociales, necesitan reconstruir su confianza, y la decisión de cambiar debe venir de ellos mismos para que no vuelvan a la calle."},
-  {lvl:"C",q:"Evalúa: ¿es la ley boliviana sobre el trabajo juvenil un avance o un retroceso? Defiende tu posición.",opts:["Solo es un avance porque protege a los niños trabajadores","Solo es un retroceso porque ningún país civilizado debería permitirlo","Puede ser un avance pragmático al regularizar una realidad existente, pero representa un retroceso en derechos del niño porque acepta lo que debería eliminarse","No es ni avance ni retroceso"],correct:2,fb:"Respuesta modelo: reconoce la contradicción — pragmáticamente regula una realidad (a favor), pero idealmente acepta lo que los organismos internacionales consideran una violación de derechos. Una posición matizada es la más sólida en el Abitur."},
-  {lvl:"C",q:"'La gente en todo el mundo es responsable para el sufrimiento de los gamines.' ¿Estás de acuerdo? Argumenta.",opts:["No, la responsabilidad es solo de los padres","Sí, el consumo global y la indiferencia de las sociedades ricas contribuyen indirectamente a la pobreza que genera el trabajo infantil","No, es solo responsabilidad del gobierno boliviano","Sí, pero solo los políticos son culpables"],correct:1,fb:"Respuesta sólida (nivel C): conectar consumo global → demanda de productos baratos → explotación laboral → pobreza estructural. Ejemplo: industrias extractivas, cadenas de suministro globales. Relacionar con la brecha entre ricos y pobres mencionada en los documentos."},
-];
+const CATLBL = {definicion:'Definición',causas:'Causas',efectos:'Efectos',soluciones:'Soluciones',opinion:'Opinión'};
 
-let currentQ=0,score=0,answered=false,filteredQs=[],vocabVisible={};
-
-function showTab(t){
-  document.querySelectorAll('.tab').forEach((b,i)=>b.classList.toggle('active',['vocab','quiz','exam'][i]===t));
-  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-  document.getElementById(t).classList.add('active');
-  if(t==='quiz')initQuiz();
-  if(t==='exam')renderExam();
-}
-
-function filterVocab(cat,btn){
-  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
+function filt(cat, btn){
+  document.querySelectorAll('.fb').forEach(b=> b.classList.remove('on'));
+  btn.classList.add('on');
   renderVocab(cat);
 }
 
 function renderVocab(cat='all'){
-  const grid=document.getElementById('vocabGrid');
-  const items=cat==='all'?VOCAB:VOCAB.filter(v=>v.cat===cat);
-  grid.innerHTML=items.map((v,i)=>`
-    <div class="vocab-card${vocabVisible[v.es]?'':' hidden-de'}" onclick="toggleVocab('${v.es}')">
-      <div class="vocab-cat">${catLabel(v.cat)}</div>
-      <div class="vocab-es">${v.es}</div>
-      <div class="vocab-de">${v.de}</div>
-    </div>`).join('');
+  const list = cat==='all' ? VOCAB : VOCAB.filter(v=> v.cat===cat);
+  document.getElementById('vGrid').innerHTML = list.map(v=>{
+    const open = G.seen.has(v.es);
+    return `<div class="vc${open?' open':' shut'}" data-cat="${v.cat}" onclick="toggleVoc('${v.es.replace(/'/g,"\\'")}',this)">
+      <div class="vc-cat cat-${v.cat}">${CATLBL[v.cat]}</div>
+      <div class="vc-es">${v.es}</div>
+      <div class="vc-de">${v.de}</div>
+      <div class="vc-tap">Klicken zum Enthüllen ↓</div>
+    </div>`;
+  }).join('');
 }
 
-function catLabel(c){return{definicion:'Definition',causas:'Ursachen',efectos:'Auswirkungen',soluciones:'Lösungen',opinion:'Meinung/Redemittel'}[c]||c}
-
-function toggleVocab(es){
-  vocabVisible[es]=!vocabVisible[es];
-  const cards=document.querySelectorAll('.vocab-card');
-  cards.forEach(c=>{if(c.querySelector('.vocab-es').textContent===es)c.classList.toggle('hidden-de',!vocabVisible[es])});
+function toggleVoc(es, card){
+  const wasShut = card.classList.contains('shut');
+  card.classList.toggle('shut'); card.classList.toggle('open');
+  if(wasShut && !G.seen.has(es)){ G.seen.add(es); reward(2, 5, card); }
 }
 
-function initQuiz(){
-  const lvl=document.getElementById('levelSel').value;
-  filteredQs=shuffle(lvl==='all'?[...QUESTIONS]:QUESTIONS.filter(q=>q.lvl===lvl)).slice(0,10);
-  currentQ=0;score=0;answered=false;
-  renderQ();
+// ── QUIZ DATA ──────────────────────────────────
+const QS = [
+  {lvl:"A",q:"¿Cómo se define el trabajo infantil según los documentos?",opts:["Todo trabajo que priva a los niños de su niñez, potencial y dignidad, perjudicial para su desarrollo","Cualquier trabajo realizado por menores de 18 años en fábricas","Solo el trabajo en minas y agricultura","El trabajo no remunerado de menores"],c:0,fb:"Definición exacta: trabajo que priva de niñez, potencial y dignidad, dañino para el desarrollo físico y psicológico."},
+  {lvl:"A",q:"¿Cuáles son tres trabajos que ejercen los niños para sobrevivir?",opts:["Limpian zapatos, venden caramelos, cuidan autos","Trabajan en oficinas, hoteles y supermercados","Estudian y practican deportes profesionales","Trabajan solo en la agricultura"],c:0,fb:"Según el documento: limpiar zapatos/cristales, vender caramelos/periódicos/drogas, cuidar autos."},
+  {lvl:"A",q:"¿Cuántas etapas tiene el programa de la Fundación Pro Niños?",opts:["Dos etapas","Tres etapas","Cuatro etapas","Una etapa con varios pasos"],c:1,fb:"Tres etapas: establecer confianza → mostrar que la vida puede ser diferente → el niño decide cambiar."},
+  {lvl:"A",q:"¿Qué derechos fundamentales son vulnerados?",opts:["Educación, atención médica, vivir en paz, protección ante la explotación","Solo el derecho a la educación","Solo el derecho a no trabajar","El derecho al voto y a la propiedad"],c:0,fb:"Listados: educación, atención médica, amor/comprensión, vivir en paz, apoyo y protección ante explotación."},
+  {lvl:"B",q:"¿Por qué muchos jóvenes se unen a bandas peligrosas?",opts:["Porque quieren dinero fácil sin esfuerzo","Porque sufren violencia familiar y buscan familia sustituta con cariño y protección","Porque las bandas les ofrecen educación","Porque el Estado los obliga"],c:1,fb:"Sufren violencia familiar y quieren escapar → buscan familia, cariño y protección en las bandas."},
+  {lvl:"B",q:"¿Por qué Bolivia legalizó el trabajo infantil desde los 10 años?",opts:["Para aumentar el PIB y atraer inversión","Porque hay un millón de trabajadores menores; es imposible prohibirlo y necesario regularlo","Porque los niños prefieren trabajar a estudiar","Porque la ONU lo exige"],c:1,fb:"Un millón de trabajadores menores (innegable), imposible prohibirlo, necesario regularlo para evitar abusos."},
+  {lvl:"B",q:"¿Cuál es la crítica principal contra la ley boliviana?",opts:["Que las horas de trabajo son pocas","Bolivia es el único país del mundo con esta ley y no se puede controlar su cumplimiento","Que la ley no incluye a los menores de 10 años","Que los salarios son altos"],c:1,fb:"Bolivia es el único país del mundo (retroceso), no se puede controlar el cumplimiento → no disminuye el trabajo infantil."},
+  {lvl:"B",q:"¿Por qué son necesarios muchos programas para ayudar a los gamines?",opts:["Porque los programas son caros","Los niños tienen muchos problemas emocionales y sociales; deben reconstruir su confianza y decidir ellos mismos","Porque el gobierno lo exige","Porque los niños no quieren cambiar"],c:1,fb:"Problemas emocionales y sociales, reconstruir confianza — la decisión debe venir de ellos mismos."},
+  {lvl:"C",q:"Evalúa: ¿es la ley boliviana un avance o un retroceso?",opts:["Solo avance porque protege a los niños","Solo retroceso porque ningún país debería permitirlo","Puede ser avance pragmático al regularizar una realidad, pero retroceso en derechos del niño","No es ni avance ni retroceso"],c:2,fb:"Respuesta modelo: reconoce la contradicción — pragmático a favor, pero acepta lo que los organismos consideran violación de derechos."},
+  {lvl:"C",q:"'La gente en todo el mundo es responsable del sufrimiento de los gamines.' ¿Estás de acuerdo?",opts:["No, la responsabilidad es solo de los padres","Sí, el consumo global y la indiferencia contribuyen a la pobreza que genera el trabajo infantil","No, es solo responsabilidad del gobierno boliviano","Sí, pero solo los políticos son culpables"],c:1,fb:"Conectar: consumo global → demanda de productos baratos → explotación laboral → pobreza estructural."},
+];
+
+let curQ=0, score=0, answered=false, qs=[], earnedCoins=0;
+
+function startQuiz(){
+  const lvl = document.getElementById('lvlSel').value;
+  qs = shuffle(lvl==='all' ? [...QS] : QS.filter(q=> q.lvl===lvl)).slice(0,10);
+  curQ=0; score=0; answered=false; G.streak=0; earnedCoins=0;
+  hud(); renderQ();
 }
 
-function shuffle(a){return a.sort(()=>Math.random()-0.5)}
+function shuffle(a){ return a.sort(()=> Math.random()-.5); }
 
 function renderQ(){
-  const body=document.getElementById('quizBody');
-  const pf=document.getElementById('progressFill');
-  const pt=document.getElementById('progressTxt');
-  if(currentQ>=filteredQs.length){
-    const pct=Math.round(score/filteredQs.length*100);
-    body.innerHTML=`<div class="score-display">
-      <div class="score-num">${score}/${filteredQs.length}</div>
-      <div class="score-sub">${pct}% – ${pct>=80?'Sehr gut!':pct>=60?'Gut – noch etwas üben.':'Weiter üben – viel Erfolg!'}</div>
-      <button class="retry-btn" onclick="initQuiz()">Nochmal versuchen</button>
-    </div>`;
-    pf.style.width='100%';pt.textContent=`${filteredQs.length}/${filteredQs.length}`;return;
+  document.getElementById('qPFill').style.width = (curQ/qs.length*100)+'%';
+  document.getElementById('qPTxt').textContent = `${curQ}/${qs.length}`;
+  if(curQ >= qs.length){
+    const pct = Math.round(score/qs.length*100);
+    const bonus = pct>=80?50:pct>=60?25:10;
+    G.coins += bonus; earnedCoins += bonus; hud();
+    document.getElementById('qBody').innerHTML = `
+      <div class="score-wrap">
+        <div class="score-lbl">◈ Ergebnis</div>
+        <div class="score-big">${score}/${qs.length}</div>
+        <div class="score-sub">${pct}% — ${pct>=80?'¡Excelente!':pct>=60?'Gut — weiter üben!':'Weiter üben!'}</div>
+        <div class="score-coins">◈ +${earnedCoins} Münzen verdient</div>
+        <button class="btn-retry" onclick="startQuiz()">Nochmal ↻</button>
+      </div>`;
+    document.getElementById('qPFill').style.width='100%';
+    document.getElementById('qPTxt').textContent=`${qs.length}/${qs.length}`;
+    return;
   }
-  pf.style.width=(currentQ/filteredQs.length*100)+'%';
-  pt.textContent=`${currentQ}/${filteredQs.length}`;
-  const q=filteredQs[currentQ];answered=false;
-  body.innerHTML=`<div class="q-card">
-    <div class="q-level ${q.lvl}">Niveau ${q.lvl} – ${{A:'Reproduktion',B:'Analyse/Transfer',C:'Bewertung/Diskussion'}[q.lvl]}</div>
-    <div class="q-text">${q.q}</div>
-    <div class="opts">${q.opts.map((o,i)=>`<button class="opt" id="opt${i}" onclick="checkAnswer(${i})">${o}</button>`).join('')}</div>
-    <div id="feedback"></div>
-  </div>`;
+  const q=qs[curQ]; answered=false;
+  const lbl=['A','B','C','D'];
+  document.getElementById('qBody').innerHTML = `
+    <div class="qcard">
+      <div class="qlvl ${q.lvl}">Niveau ${q.lvl} — ${{A:'Reproduktion',B:'Analyse',C:'Bewertung'}[q.lvl]}</div>
+      <div class="qtxt">${q.q}</div>
+      <div class="opts">${q.opts.map((o,i)=>
+        `<button class="opt" id="o${i}" onclick="pick(${i})">
+          <span class="opt-idx">${lbl[i]}</span>${o}
+        </button>`).join('')}</div>
+      <div id="fb"></div>
+    </div>`;
 }
 
-function checkAnswer(i){
-  if(answered)return;answered=true;
-  const q=filteredQs[currentQ];
+function pick(i){
+  if(answered) return; answered=true;
+  const q=qs[curQ]; const ok=i===q.c;
   document.querySelectorAll('.opt').forEach((b,j)=>{
     b.disabled=true;
-    if(j===q.correct)b.classList.add(i===j?'correct':'reveal');
-    else if(j===i)b.classList.add('wrong');
+    if(j===q.c) b.classList.add(i===j?'correct':'reveal');
+    else if(j===i) b.classList.add('wrong');
   });
-  if(i===q.correct)score++;
-  const fb=document.getElementById('feedback');
-  fb.className='feedback '+(i===q.correct?'correct':'wrong');
-  fb.innerHTML=(i===q.correct?'Richtig. ':'Falsch. ')+q.fb+`<br><button class="next-btn" onclick="nextQ()">${currentQ+1<filteredQs.length?'Nächste Frage →':'Ergebnis anzeigen →'}</button>`;
+  if(ok){
+    score++; G.streak++;
+    const bonus = Math.max(0,G.streak-1)*5;
+    const coins = 15+bonus; earnedCoins+=coins;
+    reward(coins, 20, document.getElementById('o'+i));
+    if(G.streak>=3) showStreak(G.streak);
+  } else {
+    G.streak=0;
+    reward(0, 5, document.getElementById('o'+i));
+  }
+  hud();
+  const fb=document.getElementById('fb');
+  fb.className='fb-box '+(ok?'ok':'no');
+  fb.innerHTML=(ok?'✓ Richtig. ':'✗ Falsch. ')+q.fb+
+    `<button class="btn-next" onclick="nextQ()">${curQ+1<qs.length?'Nächste Frage →':'Ergebnis →'}</button>`;
 }
 
-function nextQ(){currentQ++;renderQ()}
+function nextQ(){ curQ++; renderQ(); }
 
-const EXAM_QS = [
-  {type:"Teil 1 – Monolog",lvl:"B/C",q:"Beschreibe und analysiere das Schicksal der gamines in Lateinamerika anhand des vorliegenden Materials. Gehe auf Ursachen, Formen und Folgen ein.",tip:"Struktur: Kurze Einleitung (Was ist das Thema?) → Ursachen (Armut, Familiengewalt) → Formen der Arbeit (leicht/gefährlich) → Folgen (Kriminalität, Rechtsverletzungen) → kurzer Ausblick."},
-  {type:"Teil 1 – Monolog",lvl:"B/C",q:"Erkläre das bolivianische Jugendarbeitsgesetz und stelle die Argumente dafür und dagegen dar.",tip:"Nenne zunächst den Inhalt des Gesetzes (ab 10 Jahren, max. 6 Stunden, freiwillig), dann strukturiert Argumente a favor / en contra. Schließe mit einer Einschätzung."},
-  {type:"Teil 2 – Gespräch",lvl:"C",q:"¿Crees que la legalización del trabajo infantil en Bolivia es una solución eficaz al problema de la pobreza? ¿Por qué sí o por qué no?",tip:"Nimm eine klare Position ein und verteidige sie. Nutze Redemittel: 'Desde mi punto de vista…', 'aunque entiendo que…', 'sin embargo…'. Zeige, dass du beide Seiten kennst."},
-  {type:"Teil 2 – Gespräch",lvl:"C",q:"¿Cuál es la responsabilidad de la sociedad global frente al sufrimiento de los niños de la calle?",tip:"Verbinde globale Wirtschaftsstrukturen (Konsum, Lieferketten) mit lokaler Armut. Schlage konkrete Maßnahmen vor: apoyo a ONGs, comercio justo, presión política."},
-  {type:"Teil 2 – Gespräch",lvl:"C",q:"¿Son suficientes las medidas de las organizaciones como CARE o la Fundación Pro Niños para resolver el problema estructural?",tip:"Kritische Einschätzung: estas organizaciones hacen un trabajo valioso, pero no atacan las causas estructurales (pobreza, desigualdad). Se necesitan cambios políticos y económicos."},
-  {type:"Sprachmittlung",lvl:"B",q:"Tu amigo alemán ha leído sobre la ley boliviana y dice: 'Hay que prohibir el trabajo infantil en todo el mundo sin excepciones.' Explícale en español por qué esta posición, aunque comprensible, ignora la realidad de muchas familias.",tip:"Hier musst du eine andere Perspektive erklären, ohne deine eigene Meinung zu verlieren. Nutze: 'Entiendo tu posición, sin embargo…', 'hay que tener en cuenta que…'"},
+// ── EXAM DATA ──────────────────────────────────
+const EQ = [
+  {type:"Teil 1 – Monolog",lvl:"B/C",q:"Beschreibe und analysiere das Schicksal der gamines in Lateinamerika. Gehe auf Ursachen, Formen und Folgen ein.",tip:"Struktur: Einleitung → Ursachen (Armut, Familiengewalt) → Formen der Arbeit → Folgen (Kriminalität, Rechtsverletzungen) → Ausblick."},
+  {type:"Teil 1 – Monolog",lvl:"B/C",q:"Erkläre das bolivianische Jugendarbeitsgesetz und stelle die Argumente dafür und dagegen dar.",tip:"Inhalt des Gesetzes (ab 10 Jahren, max. 6h, freiwillig), dann a favor / en contra. Schließe mit einer Einschätzung."},
+  {type:"Teil 2 – Gespräch",lvl:"C",q:"¿Crees que la legalización del trabajo infantil en Bolivia es una solución eficaz al problema de la pobreza?",tip:"Klare Position + Verteidigung. Nutze: 'Desde mi punto de vista…', 'aunque entiendo que…', 'sin embargo…'"},
+  {type:"Teil 2 – Gespräch",lvl:"C",q:"¿Cuál es la responsabilidad de la sociedad global frente al sufrimiento de los niños de la calle?",tip:"Verbinde globale Wirtschaftsstrukturen mit lokaler Armut. Schlage Maßnahmen vor: apoyo a ONGs, comercio justo."},
+  {type:"Teil 2 – Gespräch",lvl:"C",q:"¿Son suficientes las medidas de organizaciones como CARE o la Fundación Pro Niños?",tip:"Estas organizaciones hacen trabajo valioso, pero no atacan causas estructurales. Se necesitan cambios políticos."},
+  {type:"Sprachmittlung",lvl:"B",q:"Tu amigo alemán dice: 'Hay que prohibir el trabajo infantil sin excepciones.' Explícale por qué esta posición ignora la realidad.",tip:"'Entiendo tu posición, sin embargo…', 'hay que tener en cuenta que…' Erkläre die andere Perspektive."},
 ];
 
 function renderExam(){
-  const body=document.getElementById('examBody');
-  body.innerHTML=EXAM_QS.map((q,i)=>`
-    <div class="q-sample">
-      <div class="q-sample-head">
-        <span class="q-sample-type">${q.type}</span>
-        <span class="q-sample-lvl">Anforderungsbereich ${q.lvl}</span>
+  document.getElementById('exBody').innerHTML = EQ.map(q=>`
+    <div class="eq">
+      <div class="eq-head">
+        <span class="eq-type">${q.type}</span>
+        <span class="eq-lvl">Anforderungsbereich ${q.lvl}</span>
       </div>
-      <div class="q-sample-q">${q.q}</div>
-      <div class="q-sample-tip">${q.tip}</div>
-      <button class="sendprompt-btn" onclick="sendPrompt('Hilf mir, diese Prüfungsfrage auf Spanisch zu beantworten: ${q.q.replace(/'/g,"\\'")}')">Mit Claude üben ↗</button>
+      <div class="eq-body">
+        <div class="eq-q">${q.q}</div>
+        <div class="eq-tip">${q.tip}</div>
+        <button class="btn-claude" onclick="alert('Frage kopiert:\\n\\n${q.q.replace(/'/g,"\\'")}')">Mit Claude üben ↗</button>
+      </div>
     </div>`).join('');
 }
 
+// ── INIT ───────────────────────────────────────
 renderVocab();
 </script>
+</body>
+</html>
